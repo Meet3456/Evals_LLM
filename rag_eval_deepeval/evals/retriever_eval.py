@@ -1,0 +1,76 @@
+import os
+
+from deepeval import evaluate
+from deepeval.metrics import ContextualPrecisionMetric, ContextualRecallMetric
+from deepeval.models import LiteLLMModel
+from deepeval.test_case import LLMTestCase
+from dotenv import load_dotenv
+# from langchain_groq import ChatGroq
+from src.reranker import RerankingRetriever
+
+from evals.harness import load_goldens, print_summary, summarize_by_metric
+
+load_dotenv()
+
+GOLDEN_PATH = "golden_dataset/retriever_goldens.json"
+
+JUDGE_MODEL = "gpt-4o-mini"
+
+# If recall/precision value of a specific test case is below 0.7 it rejects the test case
+THRESHOLD = 0.7
+
+def run(retriever):
+    # 1. LOAD the golden set - the fixed, human-authored truth
+    goldens = load_goldens(GOLDEN_PATH)
+
+    # 2. RUN THE INJECTED RETRIEVER on each question to fill retrieval_context, then build one test case per golden
+    test_cases = []
+
+    for g in goldens:
+
+        # get the retrieved docs for the query
+        retrieved = retriever.invoke(g["query"])
+
+        # Extracting the text from the retrieved docs
+        retrieval_context = [doc.page_content for doc in retrieved]
+
+        # Here each question of our golden-dataset acts as a LLMTestCase
+        test_cases.append(
+            LLMTestCase(
+                input = g["query"],
+                expected_output = g["ideal_answer"],
+                retrieval_context=retrieval_context,
+                actual_output="(generator not evaluated in this run , only the retriever)"
+
+            )
+        )
+
+    # 3. THE METRICS - recall (did we miss?) and precision (ranked well?)
+    metrics = [
+        ContextualRecallMetric(threshold=THRESHOLD , model= JUDGE_MODEL , include_reason=True),
+        ContextualPrecisionMetric(threshold=THRESHOLD , model=JUDGE_MODEL , include_reason=True)
+    ]
+
+    result = evaluate(
+        test_cases=test_cases,
+        metrics=metrics,
+        hyperparameters={
+            "retriever": "reranker",  # vs "reranked" when you swap it in
+            "embedding_model": "Qwen/Qwen3-Embedding-0.6B",
+            "chunk_size": 1000,
+            "chunk_overlap": 150,
+            "top_k": 3,
+            "judge_model": JUDGE_MODEL,
+            "golden_set": GOLDEN_PATH,
+        },
+    )
+
+    return summarize_by_metric(result)
+
+def run_local():
+    """Standalone convenience: build the retriever, then run."""
+    return run(RerankingRetriever())
+
+
+if __name__ == "__main__":
+    print_summary("retriever", run_local())
