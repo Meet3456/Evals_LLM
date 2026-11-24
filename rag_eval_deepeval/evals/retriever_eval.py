@@ -1,8 +1,8 @@
-import os
+# import os
 
 from deepeval import evaluate
 from deepeval.metrics import ContextualPrecisionMetric, ContextualRecallMetric
-from deepeval.models import LiteLLMModel
+# from deepeval.models import LiteLLMModel
 from deepeval.test_case import LLMTestCase
 from dotenv import load_dotenv
 # from langchain_groq import ChatGroq
