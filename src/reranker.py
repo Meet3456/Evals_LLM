@@ -12,6 +12,7 @@ load_dotenv()
 CROSS_ENCODER = "cross-encoder/ms-marco-MiniLM-L-6-v2"
 hf_token = os.getenv("HF_TOKEN")
 
+
 class RerankingRetriever:
     def __init__(self, fetch_k=10, top_k=5):
         self.store = load_and_build_store()

@@ -2,22 +2,24 @@
 
 from deepeval import evaluate
 from deepeval.metrics import ContextualPrecisionMetric, ContextualRecallMetric
+
 # from deepeval.models import LiteLLMModel
 from deepeval.test_case import LLMTestCase
 from dotenv import load_dotenv
+from harness import load_goldens, print_summary, summarize_by_metric
+
 # from langchain_groq import ChatGroq
 from src.reranker import RerankingRetriever
-
-from evals.harness import load_goldens, print_summary, summarize_by_metric
 
 load_dotenv()
 
 GOLDEN_PATH = "golden_dataset/retriever_goldens.json"
 
-JUDGE_MODEL = "gpt-4o-mini"
+JUDGE_MODEL = "gpt-5-nano"
 
 # If recall/precision value of a specific test case is below 0.7 it rejects the test case
 THRESHOLD = 0.7
+
 
 def run(retriever):
     # 1. LOAD the golden set - the fixed, human-authored truth
@@ -27,7 +29,6 @@ def run(retriever):
     test_cases = []
 
     for g in goldens:
-
         # get the retrieved docs for the query
         retrieved = retriever.invoke(g["query"])
 
@@ -37,18 +38,21 @@ def run(retriever):
         # Here each question of our golden-dataset acts as a LLMTestCase
         test_cases.append(
             LLMTestCase(
-                input = g["query"],
-                expected_output = g["ideal_answer"],
+                input=g["query"],
+                expected_output=g["ideal_answer"],
                 retrieval_context=retrieval_context,
-                actual_output="(generator not evaluated in this run , only the retriever)"
-
+                actual_output="(generator not evaluated in this run , only the retriever)",
             )
         )
 
     # 3. THE METRICS - recall (did we miss?) and precision (ranked well?)
     metrics = [
-        ContextualRecallMetric(threshold=THRESHOLD , model= JUDGE_MODEL , include_reason=True),
-        ContextualPrecisionMetric(threshold=THRESHOLD , model=JUDGE_MODEL , include_reason=True)
+        ContextualRecallMetric(
+            threshold=THRESHOLD, model=JUDGE_MODEL, include_reason=True
+        ),
+        ContextualPrecisionMetric(
+            threshold=THRESHOLD, model=JUDGE_MODEL, include_reason=True
+        ),
     ]
 
     result = evaluate(
@@ -66,6 +70,7 @@ def run(retriever):
     )
 
     return summarize_by_metric(result)
+
 
 def run_local():
     """Standalone convenience: build the retriever, then run."""
