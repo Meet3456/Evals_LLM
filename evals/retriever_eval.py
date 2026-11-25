@@ -6,7 +6,8 @@ from deepeval.metrics import ContextualPrecisionMetric, ContextualRecallMetric
 # from deepeval.models import LiteLLMModel
 from deepeval.test_case import LLMTestCase
 from dotenv import load_dotenv
-from harness import load_goldens, print_summary, summarize_by_metric
+
+from evals.harness import load_goldens, print_summary, summarize_by_metric
 
 # from langchain_groq import ChatGroq
 from src.reranker import RerankingRetriever
