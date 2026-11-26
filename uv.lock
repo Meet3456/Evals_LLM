@@ -742,6 +742,7 @@ dependencies = [
     { name = "langchain-chroma" },
     { name = "langchain-core" },
     { name = "langchain-groq" },
+    { name = "langchain-openai" },
     { name = "langchain-text-splitters" },
     { name = "litellm" },
     { name = "pytest" },
@@ -757,6 +758,7 @@ requires-dist = [
     { name = "langchain-chroma", specifier = ">=1.2.0" },
     { name = "langchain-core", specifier = ">=1.8.4" },
     { name = "langchain-groq", specifier = ">=1.2.1" },
+    { name = "langchain-openai", specifier = ">=1.8.5" },
     { name = "langchain-text-splitters", specifier = ">=1.2.0" },
     { name = "litellm", specifier = ">=1.110.3" },
     { name = "pytest", specifier = ">=9.2.0" },
@@ -1540,6 +1542,21 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/8f/6b/f20ff541e7d50848306c379541bc204b77ffff07b088688b3d78fe1072fb/langchain_groq-1.2.1.tar.gz", hash = "sha256:0ce10a14be647bf7d1c1c66348c8d7124a8ab6857cc6d65e4984fed7b2215752", size = 194702, upload-time = "2026-11-18T17:27:06.216Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/30/bb/b02a9c5b97a3bca9950d5671d760bd0134176dba6d5eb34911e9dbea583d/langchain_groq-1.2.1-py3-none-any.whl", hash = "sha256:c279273547baf192c32013ea66f2da69ef6469e30b147483999911ff1ba5bf77", size = 21665, upload-time = "2026-11-18T17:27:05.091Z" },
+]
+
+[[package]]
+name = "langchain-openai"
+version = "1.8.5"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "certifi" },
+    { name = "langchain-core" },
+    { name = "openai" },
+    { name = "tiktoken" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/fa/6e/a3ff2ffaeea59532616f34e7f64c863c42ac5cb618d5bc867201700c29c3/langchain_openai-1.8.5.tar.gz", hash = "sha256:53f2612f61290edc115712a887e384dac9984783689d2e2b4ca7fbc75c1e0e64", size = 2812903, upload-time = "2026-11-19T23:16:07.496Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/de/cc/8bad1420ab5ad396f3c5ea7d4aabbd45b31a84aeb27bc7122756a5c55026/langchain_openai-1.8.5-py3-none-any.whl", hash = "sha256:e5bc9d1da58231496caf2e09c42c5ed21ddc8bb4e2427300c8e8a7b1a8372bf1", size = 158006, upload-time = "2026-11-19T23:16:06.374Z" },
 ]
 
 [[package]]
