@@ -5,7 +5,7 @@ from langchain_openai import ChatOpenAI
 
 load_dotenv()
 
-llm = ChatOpenAI(model="gpt-4o-mini", temperature=0, max_tokens=256, timeout=30)
+llm = ChatOpenAI(model="gpt-4o-mini", temperature=0, max_tokens=512, timeout=30)
 
 # faithfulness-first prompt: ground every claim in the context, abstain if unsure
 prompt = ChatPromptTemplate.from_template(

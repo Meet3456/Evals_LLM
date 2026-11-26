@@ -27,7 +27,7 @@ def run(rag):
     for g in goldens:
         result = rag.invoke(g["query"])  # retrieve -> rerank -> generate
 
-        test_cases.append(
+        test_cases.append( 
             LLMTestCase(
                 input=g["query"],
                 actual_output=result["answer"],  # what the generator produced

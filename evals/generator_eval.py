@@ -9,8 +9,6 @@ by the context it was given? (Did the generator make things up?)
 ISOLATION: we feed the generator the GOLDEN context (the known-good chunks
 from the faithfulness dataset), NOT the retriever's output. So a low score
 is purely the generator's fault --- the context was already correct.
-
-    python -m evals.eval_generator
 """
 
 from deepeval import evaluate
